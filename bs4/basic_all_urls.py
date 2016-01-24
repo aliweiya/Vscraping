@@ -11,7 +11,7 @@ def get_local_links(url):
     web = urllib2.urlopen(url)
     soup = BeautifulSoup(web.read())
     #write reg for checking the only_domain 
-    links = soup.findAll(href=re.compile("^(https?://[0-9a-zA-Z_]{,20}\.?freebuf.com)"))
+    links = soup.findAll(href=re.compile("^(https?://[0-9a-zA-Z_]{,10}\.?freebuf\.com)"))
     for link in links:
         if "href" in link.attrs:
             print link.attrs["href"]
@@ -24,12 +24,13 @@ def get_remote_links(url):
     web = urllib2.urlopen(url)
     soup = BeautifulSoup(web.read())
     #write reg for checking the only_domain 
-    links = soup.findAll(href=re.compile("^(https?://[0-9a-zA-Z_]{,20}\.?(freebuf.com))"))
+    links = soup.findAll(href=re.compile("^(https?://)"))
     for link in links:
         if "href" in link.attrs:
-            print link.attrs["href"]
-            #deal with our data(to store it permenently or to use a database)
-            sites.add(link.attrs["href"])
+            if "freebuf.com" not in link.attrs["href"].replace("//","").split("/")[0]:
+                print link.attrs["href"]
+                #deal with our data(to store it permenently or to use a database)
+                sites.add(link.attrs["href"])
     return sites    
 
 get_remote_links("http://www.freebuf.com/")
